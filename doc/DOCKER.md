@@ -77,6 +77,17 @@ Downstream deployment tooling must verify [source proof](cloud-build-readiness.m
 the standard image attestation, the exact-source migrator, and its own composed
 image before rollout. Resolve immutable digests instead of deploying mutable tags.
 
+## Runner image
+
+The `runner-artifacts` target builds the Runner alone: the daemon, the Runner
+package's build output, the remote provider pack and its transport archives.
+`.github/workflows/runner-image.yml` publishes it as
+`ghcr.io/paperclipai/paperclip-runner:inputs-<digest>` each time the Runner's
+inputs change, for Linux AMD64 and ARM64, with a GitHub/Sigstore attestation.
+The target does not depend on the server or UI build, and no other target
+depends on it yet. See [`doc/runner-image-contract.md`](runner-image-contract.md)
+for the layout, the identity rules and how to verify and consume the image.
+
 ## One-liner (build + run)
 
 ```sh
